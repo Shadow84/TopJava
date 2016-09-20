@@ -45,7 +45,7 @@ public class MealServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
-
+        String userId = request.getParameter("userId");
         if (action == null) {
             LOG.info("getAll");
             request.setAttribute("mealList",
@@ -67,6 +67,11 @@ public class MealServlet extends HttpServlet {
 
     private int getId(HttpServletRequest request) {
         String paramId = Objects.requireNonNull(request.getParameter("id"));
+        return Integer.valueOf(paramId);
+    }
+
+    private int getUserId(HttpServletRequest request) {
+        String paramId = Objects.requireNonNull(request.getParameter("userId"));
         return Integer.valueOf(paramId);
     }
 }
