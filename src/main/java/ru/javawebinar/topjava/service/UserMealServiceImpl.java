@@ -27,6 +27,7 @@ public class UserMealServiceImpl implements UserMealService {
 
     @Autowired
     private UserMealRepository repository;
+
     @Override
     public boolean create(UserMeal userMeal, int userId) throws NotFoundException {
         LOG.info("update usermeal " + userMeal + " userId" + userId);
@@ -42,6 +43,7 @@ public class UserMealServiceImpl implements UserMealService {
         }
         return repository.save(userMeal) != null;
     }
+
     @Override
     public boolean delete(int id, int userId) throws NotFoundException {
         LOG.info("delete usermeal " + id + " userId" + userId);
@@ -82,30 +84,38 @@ public class UserMealServiceImpl implements UserMealService {
     @Override
     public List<UserMealWithExceed> getByDescription(String description, int userId) throws NotFoundException {
         LOG.info("getByDescription  " + description + " userId" + userId);
-        Collection<UserMeal> result = repository.getByDescription(description)
+        Collection<UserMeal> meals = repository.getAll()
                 .stream()
                 .filter(um -> um.getUserId() == userId)
+                .collect(Collectors.toList());
+
+        if (meals == null || meals.isEmpty()) {
+            throw new NotFoundException("not have usermeal to user" + userId);
+        }
+        List<UserMealWithExceed> result = UserMealsUtil.getWithExceeded(meals, UserMealsUtil.DEFAULT_CALORIES_PER_DAY)
+                .stream()
+                .filter(um -> um.getDescription().equals(description))
                 .collect(Collectors.toList());
 
         if (result == null || result.isEmpty()) {
             throw new NotFoundException("not have usermeal to user" + userId);
         }
-        return UserMealsUtil.getWithExceeded(result, UserMealsUtil.DEFAULT_CALORIES_PER_DAY);
+        return result;
     }
 
     @Override
     public List<UserMealWithExceed> getFilteredByDateTime(LocalDate fromLocalDate, LocalTime fromLocalTime, LocalDate toLocalDate, LocalTime toLocalTime, int userId) throws NotFoundException {
         LOG.info("getFilteredByDateTime usermeal from LocalDate " + fromLocalDate + " LocalTime" + fromLocalTime + " to LocalDate " + toLocalDate + " toLocalTime " + toLocalTime + " userId " + userId);
-        Collection<UserMeal> users = repository.getFilteredByDateTime(fromLocalDate,  toLocalDate)
+        Collection<UserMeal> meals = repository.getFilteredByDateTime(fromLocalDate, toLocalDate)
                 .stream()
                 .filter(um -> um.getUserId() == userId)
                 .collect(Collectors.toList());
 
-        if (users == null || users.isEmpty()) {
+        if (meals == null || meals.isEmpty()) {
             throw new NotFoundException("not have usermeal to user" + userId);
         }
 
-        List<UserMealWithExceed> result = UserMealsUtil.getWithExceeded(users, UserMealsUtil.DEFAULT_CALORIES_PER_DAY)
+        List<UserMealWithExceed> result = UserMealsUtil.getWithExceeded(meals, UserMealsUtil.DEFAULT_CALORIES_PER_DAY)
                 .stream()
                 .filter(UserMealWithExceed -> TimeUtil.isBetweenTime(UserMealWithExceed.getDateTime().toLocalTime(), fromLocalTime, toLocalTime))
                 .collect(Collectors.toList());

@@ -87,9 +87,12 @@ public class UserMealRestController {
         return byDescription;
     }
 
-    public List<UserMealWithExceed> getFilteredbyDateTime(LocalDate fromLocalDate, LocalTime fromLocalTime, LocalDate toLocalDate, LocalTime toLocalTime, int userId) {
+    public List<UserMealWithExceed> getFilteredbyDateTime(LocalDate fromLocalDate, LocalTime fromLocalTime, LocalDate toLocalDate, LocalTime toLocalTime) {
         LOG.info("getFilteredByDateTime usermeal from LocalDate " + fromLocalDate + " LocalTime" + fromLocalTime + " to LocalDate " + toLocalDate + " toLocalTime " + toLocalTime + " userId " + LoggedUser.id());
         List<UserMealWithExceed> filteredByDateTime = null;
+        if (fromLocalDate == null || toLocalDate == null || fromLocalTime == null || toLocalTime == null){
+            Collections.emptyList();
+        }
         try {
             filteredByDateTime = service.getFilteredByDateTime(fromLocalDate, fromLocalTime, toLocalDate, toLocalTime, LoggedUser.id());
         } catch (NotFoundException e) {

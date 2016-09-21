@@ -28,7 +28,6 @@ public class InMemoryUserMealRepositoryImpl implements UserMealRepository {
 
     {
         UserMealsUtil.MEAL_LIST.forEach((userMeal) -> {
-            userMeal.setUserId(10);
             save(userMeal);
         });
     }
@@ -60,18 +59,6 @@ public class InMemoryUserMealRepositoryImpl implements UserMealRepository {
         LOG.info("getAll usermeals");
         List<UserMeal> result = repository.values()
                 .stream()
-                .collect(Collectors.toList());
-
-        result.sort((um1, um2) -> um2.getDateTime().compareTo(um1.getDateTime()));
-        return result;
-    }
-
-    @Override
-    public Collection<UserMeal> getByDescription(String description) {
-        LOG.info("usermeal getByDescription");
-        List<UserMeal> result = repository.values()
-                .stream()
-                .filter(userMeal -> userMeal.getDescription().equals(description))
                 .collect(Collectors.toList());
 
         result.sort((um1, um2) -> um2.getDateTime().compareTo(um1.getDateTime()));
