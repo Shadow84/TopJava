@@ -22,5 +22,5 @@ public interface UserMealRepository {
 
     Collection<UserMeal> getByDescription(String description);
 
-    Collection<UserMeal> getFilteredByDateTime(LocalDate fromLocalDate, LocalTime fromLocalTime, LocalDate toLocalDate, LocalTime toLocalTime);
+    Collection<UserMeal> getFilteredByDateTime(LocalDate fromLocalDate, LocalDate toLocalDate);
 }

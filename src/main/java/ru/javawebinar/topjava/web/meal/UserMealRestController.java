@@ -11,7 +11,6 @@ import ru.javawebinar.topjava.to.UserMealWithExceed;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -56,7 +55,7 @@ public class UserMealRestController {
 
     public List<UserMealWithExceed> getFilteredbyDateTime(LocalDate fromLocalDate, LocalTime fromLocalTime, LocalDate toLocalDate, LocalTime toLocalTime, int userId) {
         LOG.info("getFilteredByDateTime usermeal from LocalDate " + fromLocalDate + " LocalTime" + fromLocalTime + " to LocalDate " + toLocalDate + " toLocalTime " + toLocalTime + " userId " + LoggedUser.id());
-        return service.getFilteredbyDateTime(fromLocalDate, fromLocalTime, toLocalDate, toLocalTime, LoggedUser.id());
+        return service.getFilteredByDateTime(fromLocalDate, fromLocalTime, toLocalDate, toLocalTime, LoggedUser.id());
     }
 }
 

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import ru.javawebinar.topjava.model.UserMeal;
 import ru.javawebinar.topjava.repository.UserMealRepository;
 import ru.javawebinar.topjava.to.UserMealWithExceed;
+import ru.javawebinar.topjava.util.TimeUtil;
 import ru.javawebinar.topjava.util.UserMealsUtil;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
@@ -26,6 +27,43 @@ public class UserMealServiceImpl implements UserMealService {
 
     @Autowired
     private UserMealRepository repository;
+    @Override
+    public boolean create(UserMeal userMeal, int userId) throws NotFoundException {
+        LOG.info("update usermeal " + userMeal + " userId" + userId);
+        userMeal.setUserId(userId);
+        return repository.save(userMeal) != null;
+    }
+
+    @Override
+    public boolean update(UserMeal userMeal, int userId) throws NotFoundException {
+        LOG.info("update usermeal " + userMeal + " userId" + userId);
+        if (userMeal.getUserId() == userId) {
+            return repository.save(userMeal) != null;
+        }
+        return false;
+    }
+    @Override
+    public boolean delete(int id, int userId) throws NotFoundException {
+        LOG.info("delete usermeal " + id + " userId" + userId);
+
+        UserMeal userMeal = repository.get(id);
+        if (userMeal == null || userMeal.getUserId() != userId) {
+            throw new NotFoundException("not have usermeal to user" + userId);
+        } else if (!repository.delete(id)) {
+            throw new NotFoundException("not have usermeal to user" + userId);
+        }
+        return true;
+    }
+
+    @Override
+    public UserMeal get(int id, int userId) throws NotFoundException {
+        LOG.info("get usermeal " + id + " userId" + userId);
+        UserMeal result = repository.get(id);
+        if (result == null || result.getUserId() != userId) {
+            throw new NotFoundException("not have usermeal to user" + userId);
+        }
+        return result;
+    }
 
     @Override
     public List<UserMealWithExceed> getAll(int userId) throws NotFoundException {
@@ -35,33 +73,10 @@ public class UserMealServiceImpl implements UserMealService {
                 .filter(um -> um.getUserId() == userId)
                 .collect(Collectors.toList());
 
-        if (result == null && result.isEmpty()) {
+        if (result == null || result.isEmpty()) {
             throw new NotFoundException("not have usermeal to user" + userId);
         }
         return UserMealsUtil.getWithExceeded(result, UserMealsUtil.DEFAULT_CALORIES_PER_DAY);
-    }
-
-    @Override
-    public UserMeal get(int id, int userId) throws NotFoundException {
-        LOG.info("get usermeal " + id + " userId" + userId);
-        UserMeal result = repository.get(id);
-        if (result == null && result.getUserId() != userId) {
-            throw new NotFoundException("not have usermeal to user" + userId);
-        }
-        return result;
-    }
-
-    @Override
-    public boolean delete(int id, int userId) throws NotFoundException {
-        LOG.info("delete usermeal " + id + " userId" + userId);
-
-        UserMeal userMeal = repository.get(id);
-        if (userMeal.getUserId() != userId) {
-            throw new NotFoundException("not have usermeal to user" + userId);
-        } else if (!repository.delete(id)) {
-            throw new NotFoundException("not have usermeal to user" + userId);
-        }
-        return true;
     }
 
     @Override
@@ -72,40 +87,33 @@ public class UserMealServiceImpl implements UserMealService {
                 .filter(um -> um.getUserId() == userId)
                 .collect(Collectors.toList());
 
-        if (result == null && result.isEmpty()) {
+        if (result == null || result.isEmpty()) {
             throw new NotFoundException("not have usermeal to user" + userId);
         }
         return UserMealsUtil.getWithExceeded(result, UserMealsUtil.DEFAULT_CALORIES_PER_DAY);
     }
 
     @Override
-    public List<UserMealWithExceed> getFilteredbyDateTime(LocalDate fromLocalDate, LocalTime fromLocalTime, LocalDate toLocalDate, LocalTime toLocalTime, int userId) throws NotFoundException {
+    public List<UserMealWithExceed> getFilteredByDateTime(LocalDate fromLocalDate, LocalTime fromLocalTime, LocalDate toLocalDate, LocalTime toLocalTime, int userId) throws NotFoundException {
         LOG.info("getFilteredByDateTime usermeal from LocalDate " + fromLocalDate + " LocalTime" + fromLocalTime + " to LocalDate " + toLocalDate + " toLocalTime " + toLocalTime + " userId " + userId);
-        Collection<UserMeal> result = repository.getFilteredByDateTime(fromLocalDate, fromLocalTime, toLocalDate, toLocalTime)
+        Collection<UserMeal> users = repository.getFilteredByDateTime(fromLocalDate,  toLocalDate)
                 .stream()
                 .filter(um -> um.getUserId() == userId)
                 .collect(Collectors.toList());
 
-        if (result == null && result.isEmpty()) {
+        if (users == null || users.isEmpty()) {
             throw new NotFoundException("not have usermeal to user" + userId);
         }
-        return UserMealsUtil.getWithExceeded(result, UserMealsUtil.DEFAULT_CALORIES_PER_DAY);
-    }
 
+        List<UserMealWithExceed> result = UserMealsUtil.getWithExceeded(users, UserMealsUtil.DEFAULT_CALORIES_PER_DAY)
+                .stream()
+                .filter(UserMealWithExceed -> TimeUtil.isBetweenTime(UserMealWithExceed.getDateTime().toLocalTime(), fromLocalTime, toLocalTime))
+                .collect(Collectors.toList());
 
-    @Override
-    public boolean update(UserMeal userMeal, int userId) throws NotFoundException {
-        LOG.info("update usermeal " + userMeal + " userId" + userId);
-        if (userMeal.getUserId() == userId) {
-            return repository.save(userMeal) != null;
+        if (result == null || result.isEmpty()) {
+            throw new NotFoundException("not have usermeal to user" + userId);
         }
-        return false;
-    }
 
-    @Override
-    public boolean create(UserMeal userMeal, int userId) throws NotFoundException {
-        LOG.info("update usermeal " + userMeal + " userId" + userId);
-        userMeal.setUserId(userId);
-        return repository.save(userMeal) != null;
+        return result;
     }
 }

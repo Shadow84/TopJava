@@ -23,7 +23,7 @@ public interface UserMealService {
 
     List<UserMealWithExceed> getByDescription(String description, int userId) throws NotFoundException;
 
-    List<UserMealWithExceed> getFilteredbyDateTime(LocalDate fromLocalDate, LocalTime fromLocalTime, LocalDate toLocalDate, LocalTime toLocalTime, int userId) throws NotFoundException;
+    List<UserMealWithExceed> getFilteredByDateTime(LocalDate fromLocalDate, LocalTime fromLocalTime, LocalDate toLocalDate, LocalTime toLocalTime, int userId) throws NotFoundException;
 
     boolean update(UserMeal userMeal, int userId) throws NotFoundException;
 
