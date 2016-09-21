@@ -37,10 +37,10 @@ public class UserMealServiceImpl implements UserMealService {
     @Override
     public boolean update(UserMeal userMeal, int userId) throws NotFoundException {
         LOG.info("update usermeal " + userMeal + " userId" + userId);
-        if (userMeal.getUserId() == userId) {
-            return repository.save(userMeal) != null;
+        if (userMeal.getUserId() != userId) {
+            throw new NotFoundException("not have usermeal to user" + userId);
         }
-        return false;
+        return repository.save(userMeal) != null;
     }
     @Override
     public boolean delete(int id, int userId) throws NotFoundException {

@@ -8,9 +8,11 @@ import ru.javawebinar.topjava.LoggedUser;
 import ru.javawebinar.topjava.model.UserMeal;
 import ru.javawebinar.topjava.service.UserMealService;
 import ru.javawebinar.topjava.to.UserMealWithExceed;
+import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -25,22 +27,47 @@ public class UserMealRestController {
 
     public List<UserMealWithExceed> getAll() {
         LOG.info("getAll usermeals userId " + LoggedUser.id());
-        return service.getAll(LoggedUser.id());
+        List<UserMealWithExceed> all = null;
+        try {
+            all = service.getAll(LoggedUser.id());
+        } catch (NotFoundException e) {
+            LOG.error(e.getMessage());
+            return Collections.emptyList();
+        }
+        return all;
     }
 
     public UserMeal get(int id) {
         LOG.info("get usermeal " + id + " userId" + LoggedUser.id());
-        return service.get(id, LoggedUser.id());
+        UserMeal userMeal = null;
+        try {
+            userMeal = service.get(id, LoggedUser.id());
+        } catch (NotFoundException e) {
+            LOG.error(e.getMessage());
+        }
+        return userMeal;
     }
 
     public boolean delete(int id) {
         LOG.info("delete usermeal " + id + " userId" + LoggedUser.id());
-        return service.delete(id, LoggedUser.id());
+        boolean delete = false;
+        try {
+            delete = service.delete(id, LoggedUser.id());
+        } catch (NotFoundException e) {
+            LOG.error(e.getMessage());
+        }
+        return delete;
     }
 
     public boolean update(UserMeal userMeal) {
         LOG.info("update usermeal " + userMeal + " userId" + LoggedUser.id());
-        return service.update(userMeal, LoggedUser.id());
+        boolean update = false;
+        try {
+            update = service.update(userMeal, LoggedUser.id());
+        } catch (NotFoundException e) {
+            LOG.error(e.getMessage());
+        }
+        return update;
     }
 
     public boolean create(UserMeal userMeal) {
@@ -50,12 +77,26 @@ public class UserMealRestController {
 
     public List<UserMealWithExceed> getByDescription(String description) {
         LOG.info("getBydescription usermeal " + description + " userId" + LoggedUser.id());
-        return service.getByDescription(description, LoggedUser.id());
+        List<UserMealWithExceed> byDescription = null;
+        try {
+            byDescription = service.getByDescription(description, LoggedUser.id());
+        } catch (NotFoundException e) {
+            LOG.error(e.getMessage());
+            return Collections.emptyList();
+        }
+        return byDescription;
     }
 
     public List<UserMealWithExceed> getFilteredbyDateTime(LocalDate fromLocalDate, LocalTime fromLocalTime, LocalDate toLocalDate, LocalTime toLocalTime, int userId) {
         LOG.info("getFilteredByDateTime usermeal from LocalDate " + fromLocalDate + " LocalTime" + fromLocalTime + " to LocalDate " + toLocalDate + " toLocalTime " + toLocalTime + " userId " + LoggedUser.id());
-        return service.getFilteredByDateTime(fromLocalDate, fromLocalTime, toLocalDate, toLocalTime, LoggedUser.id());
+        List<UserMealWithExceed> filteredByDateTime = null;
+        try {
+            filteredByDateTime = service.getFilteredByDateTime(fromLocalDate, fromLocalTime, toLocalDate, toLocalTime, LoggedUser.id());
+        } catch (NotFoundException e) {
+            LOG.error(e.getMessage());
+            return Collections.emptyList();
+        }
+        return filteredByDateTime;
     }
 }
 
