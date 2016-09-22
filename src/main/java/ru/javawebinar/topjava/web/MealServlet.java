@@ -14,7 +14,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Objects;
 
 /**
@@ -65,12 +67,12 @@ public class MealServlet extends HttpServlet {
             String toLocalTimeParam = request.getParameter("toLocalTime");
 
             if (checkDateParams(fromLocalDateParam, fromLocaltimeParam, toLocalDateParam, toLocalTimeParam)) {
-                LocalDateTime fromLocalDate = LocalDateTime.parse(fromLocalDateParam);
-                LocalDateTime fromLocalTime = LocalDateTime.parse(fromLocaltimeParam);
-                LocalDateTime toLocalDate = LocalDateTime.parse(toLocalDateParam);
-                LocalDateTime toLocalTime = LocalDateTime.parse(toLocalTimeParam);
+                LocalDate fromLocalDate = LocalDate.parse(fromLocalDateParam);
+                LocalTime fromLocalTime = LocalTime.parse(fromLocaltimeParam);
+                LocalDate toLocalDate = LocalDate.parse(toLocalDateParam);
+                LocalTime toLocalTime = LocalTime.parse(toLocalTimeParam);
 
-                request.setAttribute("mealList", userMealRestController.getFilteredbyDateTime(fromLocalDate.toLocalDate(), fromLocalTime.toLocalTime(), toLocalDate.toLocalDate(), toLocalTime.toLocalTime()));
+                request.setAttribute("mealList", userMealRestController.getFilteredbyDateTime(fromLocalDate, fromLocalTime, toLocalDate, toLocalTime));
             } else {
                 String searchString = request.getParameter("SearchString");
                 if (searchString == null || searchString.isEmpty()) {

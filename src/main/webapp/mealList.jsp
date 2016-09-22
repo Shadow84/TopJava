@@ -29,24 +29,24 @@
                 <td>
                     <dl>
                         <dt>FromLocalDate:</dt>
-                        <dd><input type="datetime-local" value="${DateTimeFilterTO.fromLocalDate}" name="fromLocalDate">
+                        <dd><input type="date" value="${DateTimeFilterTO.fromLocalDate}" name="fromLocalDate">
                         </dd>
                     </dl>
                     <dl>
                         <dt>FromLocalTime:</dt>
-                        <dd><input type="datetime-local" value="${DateTimeFilterTO.fromLocalTime}" name="fromLocalTime">
+                        <dd><input type="time" value="${DateTimeFilterTO.fromLocalTime}" name="fromLocalTime">
                         </dd>
                     </dl>
                 </td>
                 <td>
                     <dl>
                         <dt>ToLocalDate:</dt>
-                        <dd><input type="datetime-local" value="${DateTimeFilterTO.toLocalDate}" name="toLocalDate">
+                        <dd><input type="date" value="${DateTimeFilterTO.toLocalDate}" name="toLocalDate">
                         </dd>
                     </dl>
                     <dl>
                         <dt>ToLocalTime:</dt>
-                        <dd><input type="datetime-local" value="${DateTimeFilterTO.toLocalTime}" name="toLocalTime">
+                        <dd><input type="time" value="${DateTimeFilterTO.toLocalTime}" name="toLocalTime">
                         </dd>
                     </dl>
                 </td>
