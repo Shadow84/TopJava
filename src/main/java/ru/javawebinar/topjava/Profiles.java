@@ -13,5 +13,5 @@ public class Profiles {
             DATAJPA = "datajpa";
 
     public static final String ACTIVE_DB = HSQLDB;
-    public static final String ACTIVE_REPOSITORY = JDBC;
+    public static final String ACTIVE_REPOSITORY = DATAJPA;
 }
