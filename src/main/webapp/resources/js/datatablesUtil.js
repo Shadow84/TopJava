@@ -47,6 +47,20 @@ function save() {
     });
 }
 
+function enable(checkbox, id) {
+    var enabled  = checkbox.is(":checked");
+    checkbox.closest('tr').css("text-decoration", enabled ? "none" : "line-through");
+    $.ajax({
+        type: "POST",
+        url: ajaxUrl + id,
+        data: "enabled=" + enabled,
+        success: function () {
+            successNoty(enabled ? 'Enabled' : 'Disabled');
+        }
+    });
+
+}
+
 var failedNote;
 
 function closeNoty() {
