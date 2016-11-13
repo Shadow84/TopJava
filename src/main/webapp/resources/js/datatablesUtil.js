@@ -30,11 +30,7 @@ function deleteRow(id) {
 }
 
 function updateTableByData(data) {
-    datatableApi.fnClearTable();
-    $.each(data, function (key, item) {
-        datatableApi.fnAddData(item);
-    });
-    datatableApi.fnDraw();
+    datatableApi.clear().rows.add(data).draw()
 }
 
 function save() {
