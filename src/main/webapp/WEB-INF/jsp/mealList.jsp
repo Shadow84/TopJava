@@ -14,25 +14,40 @@
         <div class="shadow">
             <h3><fmt:message key="meals.title"/></h3>
 
-            <form method="post" action="meals/filter">
-                <dl>
-                    <dt>From Date:</dt>
-                    <dd><input type="date" name="startDate" value="${startDate}"></dd>
-                </dl>
-                <dl>
-                    <dt>To Date:</dt>
-                    <dd><input type="date" name="endDate" value="${endDate}"></dd>
-                </dl>
-                <dl>
-                    <dt>From Time:</dt>
-                    <dd><input type="time" name="startTime" value="${startTime}"></dd>
-                </dl>
-                <dl>
-                    <dt>To Time:</dt>
-                    <dd><input type="time" name="endTime" value="${endTime}"></dd>
-                </dl>
-                <button type="submit"><fmt:message key="meals.filter"/></button>
-            </form>
+            <div class="view-box">
+                <form method="post" class="form-horizontal" role="form" id="filter">
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" for="startDate">From Date:</label>
+
+                        <div class="col-sm-2">
+                            <input type="date" name="startDate" id="startDate">
+                        </div>
+
+                        <label class="control-label col-sm-2" for="endDate">To Date:</label>
+
+                        <div class="col-sm-2">
+                            <input type="date" name="endDate" id="endDate">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" for="startTime">From Time:</label>
+
+                        <div class="col-sm-2">
+                            <input type="time" name="startTime" id="startTime">
+                        </div>
+
+                        <label class="control-label col-sm-2" for="endTime">To Time:</label>
+
+                        <div class="col-sm-2">
+                            <input type="time" name="endTime" id="endTime">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-8">
+                            <button type="submit" class="btn btn-primary col-xs-pull-6">Filter</button>
+                        </div>
+                    </div>
+                </form>
 
             <hr>
             <div class="view-box">
@@ -125,6 +140,18 @@
     var ajaxUrl = 'ajax/profile/meals/';
     var datatableApi;
 
+    function updateTable() {
+        $.ajax({
+            type: "POST",
+            url: ajaxUrl + "filter",
+            data: $('#filter').serialize(),
+            success: function (data) {
+                updateTableByData(data);
+                successNoty('filtered');
+            }
+        });
+    }
+
     // $(document).ready(function () {
     $(function () {
         datatableApi = $('#datatable').dataTable({
@@ -155,6 +182,10 @@
                     "asc"
                 ]
             ]
+        });
+        $('#filter').submit(function () {
+            updateTable();
+            return false;
         });
         makeEditable();
     });
