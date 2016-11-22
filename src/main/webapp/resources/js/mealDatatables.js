@@ -13,10 +13,11 @@ function updateTable() {
 
 $(function () {
     datatableApi = $('#datatable').DataTable(
-        { "ajax": {
-            "url": ajaxUrl,
-            "dataSrc": ""
-        },
+        {
+            "ajax": {
+                "url": ajaxUrl,
+                "dataSrc": ""
+            },
             "paging": false,
             "info": true,
             "columns": [
@@ -54,13 +55,51 @@ $(function () {
                 ]
             ],
             "createdRow": function (row, data, dataIndex) {
-                    $(row).addClass(data.exceed ? 'exceeded' : 'normal');
+                $(row).addClass(data.exceed ? 'exceeded' : 'normal');
             },
-            "initComplete": function(){
+            "initComplete": function () {
                 $('#filter').submit(function () {
                     updateTable();
                     return false;
                 });
+
+                var startDate = $('#startDate');
+                var endDate = $('#endDate');
+
+                startDate.datetimepicker({
+                    timepicker: false,
+                    format: 'Y-m-d',
+                    lang: 'ru',
+                    formatDate: 'Y-m-d',
+                    onShow: function (ct) {
+                        this.setOptions({
+                            maxDate: endDate.val() ? endDate.val() : false
+                    })
+                    }
+                });
+                endDate.datetimepicker({
+                    timepicker: false,
+                    format: 'Y-m-d',
+                    lang: 'ru',
+                    formatDate: 'Y-m-d',
+                    onShow: function (ct) {
+                        this.setOptions({
+                            minDate: startDate.val() ? startDate.val() : false
+                        })
+                    }
+                });
+
+                $('.time-picker').datetimepicker({
+                    datepicker: false,
+                    format: 'H:i',
+                    lang: 'ru'
+                });
+
+                $('#dateTime').datetimepicker({
+                    format: 'Y-m-d H:i',
+                    lang: 'ru'
+                });
+
                 makeEditable();
             }
         });
