@@ -16,6 +16,8 @@ function makeEditable() {
 function add() {
     form.find(":input").val("");
     $('#id').val(null);
+    var addValue = $('#addValue').val();
+    $('#title').text(addValue);
     $('#editRow').modal();
 }
 
@@ -26,6 +28,8 @@ function updateRow(id) {
                 key === "dateTime" ? value.replace('T', ' ').substr(0, 16) : value
             );
         });
+        var editValue = $('#editValue').val();
+        $('#title').text(editValue);
         $('#editRow').modal();
     });
 }

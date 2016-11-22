@@ -72,7 +72,11 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h2 class="modal-title"><fmt:message key="meals.edit"/></h2>
+                <fmt:message key="meals.edit" var="editValue"/>
+                <fmt:message key="meals.add" var="addValue"/>
+                <input id="editValue" type="hidden" value="${editValue}"/>
+                <input id="addValue" type="hidden" value="${addValue}"/>
+                <h2 class="modal-title" id="title"></h2>
             </div>
             <div class="modal-body">
                 <form class="form-horizontal" method="post" id="detailsForm">
