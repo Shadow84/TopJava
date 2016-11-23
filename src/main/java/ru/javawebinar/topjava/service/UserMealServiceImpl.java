@@ -55,14 +55,6 @@ public class UserMealServiceImpl implements UserMealService {
         return ExceptionUtil.checkNotFoundWithId(repository.save(UserMealsUtil.updateFromTo(userMeal, userMealTo), userId), userMeal.getId());
     }
 
-    /* @CacheEvict(value = "users", allEntries = true)
-    @Transactional
-    @Override
-    public void update(UserTo userTo) {
-        User user = get(userTo.getId());
-        repository.save(UserUtil.updateFromTo(user, userTo));
-    }*/
-
     @Override
     public UserMeal save(UserMeal meal, int userId) {
         return repository.save(meal, userId);
